@@ -23,12 +23,15 @@ set HTTP_PROXY=
 set HTTPS_PROXY=
 set http_proxy=
 set https_proxy=
+set NO_PROXY=*
+set no_proxy=*
 
 echo [2/3] 安装 Python 包...
 pip install opencv-python pyzbar qrcode[pil] -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn
 if %errorlevel% neq 0 (
     echo.
-    echo ⚠ 安装失败，尝试直接连接 PyPI...
+    echo ⚠ 清华源失败，尝试PyPI官方源...
+    set NO_PROXY=*
     pip install opencv-python pyzbar qrcode[pil]
 )
 
