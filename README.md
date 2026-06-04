@@ -20,8 +20,8 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/你的用户名/vision-learning.git
-cd vision-learning
+git clone https://github.com/kronos-emotion/Vision-Learning.git
+cd Vision-Learning
 
 # 安装依赖
 pip install -r requirements.txt
