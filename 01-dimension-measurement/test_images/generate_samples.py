@@ -19,7 +19,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 import os
 
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "test_images")
+OUTPUT_DIR = os.path.dirname(__file__)
 
 
 def create_test_part_rect():
@@ -36,7 +36,7 @@ def create_test_part_rect():
     draw.rectangle([40, 30, 200, 150], fill=180)  # 浅灰工件
     # 内部挖一个圆孔（模拟特征）
     draw.ellipse([90, 60, 150, 120], fill=60)
-    cv = np.array(cv)
+    cv = np.asarray(cv)
 
     # 合成：背景上叠加工件
     mask = cv > 0
@@ -57,7 +57,7 @@ def create_test_part_washer():
     draw.ellipse([20, 20, 220, 220], fill=200)
     # 内孔
     draw.ellipse([80, 80, 160, 160], fill=55)
-    cv = np.array(cv)
+    cv = np.asarray(cv)
 
     mask = cv > 0
     img[mask] = cv[mask]
@@ -83,7 +83,7 @@ def create_test_part_multi():
     # 右侧半圆槽
     draw.ellipse([220, 60, 280, 120], fill=50)
 
-    cv = np.array(cv)
+    cv = np.asarray(cv)
     mask = cv > 0
     img[mask] = cv[mask]
     return img
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     for name, arr in parts:
         path = os.path.join(OUTPUT_DIR, name)
         Image.fromarray(arr).save(path)
-        print(f"  ✓ {name}  ({arr.shape[1]}x{arr.shape[0]}px)")
+        print(f"  [OK] {name}  ({arr.shape[1]}x{arr.shape[0]}px)")
 
-    print(f"\n所有测试图已生成至: {OUTPUT_DIR}")
-    print("运行 python measurement.py 开始测量")
+    print(f"\nAll test images saved to: {OUTPUT_DIR}")
+    print("Run: python measurement.py  to start measuring")

@@ -13,7 +13,7 @@ import os
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "test_images")
+OUTPUT_DIR = os.path.dirname(__file__)
 
 # 尝试导入 qrcode 库（如果没安装，用替代方案）
 try:
@@ -60,7 +60,7 @@ def embed_qr_on_background(qr_img, bg_size=(400, 400), angle=0):
     bg = Image.new("L", bg_size, 200)
     # 添加噪点背景
     noise = np.random.normal(0, 15, (bg_size[1], bg_size[0])).astype(np.int16)
-    bg_arr = np.array(bg, dtype=np.int16)
+    bg_arr = np.asarray(bg, dtype=np.int16)
     bg_arr = np.clip(bg_arr + noise, 0, 255).astype(np.uint8)
     bg = Image.fromarray(bg_arr)
 
@@ -71,7 +71,7 @@ def embed_qr_on_background(qr_img, bg_size=(400, 400), angle=0):
     x = (bg_size[0] - qr_img.width) // 2
     y = (bg_size[1] - qr_img.height) // 2
     bg.paste(qr_img, (x, y))
-    return np.array(bg)
+    return np.asarray(bg)
 
 
 def create_distorted_qr():
@@ -83,7 +83,7 @@ def create_distorted_qr():
     qr = qr.convert("L").resize((200, 200), Image.LANCZOS)
 
     bg = Image.new("L", (400, 400), 220)
-    bg_arr = np.array(bg, dtype=np.uint8)
+    bg_arr = np.asarray(bg, dtype=np.uint8)
 
     # 在随机位置放置（模拟透视效果用仿射变换简化）
     pts_src = np.float32([[0, 0], [200, 0], [0, 200], [200, 200]])
@@ -98,7 +98,7 @@ def create_distorted_qr():
     # 用 OpenCV 做透视变换（如果有 cv2）
     try:
         import cv2
-        qr_arr = np.array(qr)
+        qr_arr = np.asarray(qr)
         M = cv2.getPerspectiveTransform(pts_src, pts_dst)
         warped = cv2.warpPerspective(qr_arr, M, (400, 400), borderValue=220)
         # 合成
@@ -142,6 +142,6 @@ if __name__ == "__main__":
     for name, arr in test_cases:
         path = os.path.join(OUTPUT_DIR, name)
         Image.fromarray(arr).save(path)
-        print(f"  ✓ {name}  ({arr.shape[1]}x{arr.shape[0]}px)")
+        print(f"  [OK] {name}  ({arr.shape[1]}x{arr.shape[0]}px)")
 
-    print(f"\n所有测试图已生成至: {OUTPUT_DIR}")
+    print(f"\nAll test images saved to: {OUTPUT_DIR}")
